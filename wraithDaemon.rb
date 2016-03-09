@@ -26,6 +26,16 @@ get '/' do
   haml :home
 end
 
+get '/health-check' do
+  build_queue = BuildQueue.new
+  if ( build_queue.length < 3)
+    "OK"
+  else
+    status 400
+    body 'Not OK'
+  end
+end
+
 get '/:config/latest' do
   daemon_config = DaemonConfig.new
   config = params[:config]
